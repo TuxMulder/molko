@@ -23,10 +23,16 @@ fclose($outJson);
 fclose($handle);
 
 function convertPostCodeToLatLong($postCode){
-	$postCode = str_replace(" ", "", $postCode);
-	$url = "http://uk-postcodes.com/postcode/$postCode.csv"; 
-	$postCodeData = explode(",", file_get_contents($url));
-	return "[$postCodeData[1], $postCodeData[2]]";
+	try{
+		$postCode = str_replace(" ", "", $postCode);
+		$url = "http://uk-postcodes.com/postcode/$postCode.csv"; 
+		$postCodeData = explode(",", file_get_contents($url));
+		return "[$postCodeData[1], $postCodeData[2]]";
+	}
+	catch(Exception $e){
+		//log the postcode that's not been found
+		return "[null,null]";
+	}
 }
 
 function convertLineToJson($line){
