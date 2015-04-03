@@ -30,7 +30,7 @@ function convertPostCodeToLatLong($postCode){
 		return "[$postCodeData[1], $postCodeData[2]]";
 	}
 	catch(Exception $e){
-		//log the postcode that's not been found
+		error_log("Postcode not found: $postCode");
 		return "[null,null]";
 	}
 }
