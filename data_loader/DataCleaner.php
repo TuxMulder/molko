@@ -1,7 +1,6 @@
 <?php
 $outJson = fopen("pharmacies.json", "w");
 
-fwrite($outJson, "[");
 $row = 1;
 if(($handle = fopen("../raw_data/edispensary.csv", "r")) !== FALSE){
 	while(($line = fgetcsv($handle, 0, ",")) !== FALSE){
@@ -17,35 +16,36 @@ if(($handle = fopen("../raw_data/edispensary.csv", "r")) !== FALSE){
 		$row++;
 	}
 }
-fwrite($outJson, "]");
 
 fclose($outJson);
 fclose($handle);
 
 function convertPostCodeToLatLong($postCode){
-	try{		
-		$url = "http://api.postcodes.io/postcodes/$postCode";
-		$data = file_get_contents($url);
-		$postCodeData = json_decode(file_get_contents($url));
+	$url = "http://api.postcodes.io/postcodes/$postCode";
+	$data = file_get_contents($url);
+	if($data !== FALSE){
+		$postCodeData = json_decode($data);
 		$lat = $postCodeData -> {'result'} ->{'latitude'};
 		$long = $postCodeData -> {'result'} ->{'longitude'};
-
 		return "[$lat,$long]";
-	}
-	catch(Exception $e){
+	}else{
+		echo "couldn't find: $postCode trying slower lookup";
 		return slowerConvertPostCodeToLatLong($postCode);
 	}
 }
 
 function slowerConvertPostCodeToLatLong($postCode){
-	try{
-		$postCode = str_replace(" ", "", $postCode);
-		$url = "http://uk-postcodes.com/postcode/$postCode.csv";
-		$postCodeData = explode(",", file_get_contents($url));
+	
+	$postCode = str_replace(" ", "", $postCode);
+	$url = "http://uk-postcodes.com/postcode/$postCode.csv";
+	$data = file_get_contents($url);
+	if($data !== FALSE){
+		$postCodeData = explode(",", $data);
 		return "[$postCodeData[1], $postCodeData[2]]";
 	}
-	catch(Exception $e){
+	else{
 		error_log("Postcode not found: $postCode");
+		echo "Postcode not found: $postCode";
 		return "[null,null]";
 	}
 }
