@@ -1,0 +1,45 @@
+<div class="container">
+	<div class="row" style="padding-top:40px;">
+		<div class="angular-google-map-container" ng-controller='LocCtrl as locationController'>
+
+			<div class="col-lg-offset-4 col-lg-4">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Find a Pharmacy</div>
+						<form class='ng-invalid ng-invalid-required ng-dirty' ng-submit name='findPharmacies'>
+							<div class='form-group'>
+								<label class='control-label'>Latitude</label>
+								<input id='latitude' class='form-control' type='text' autofocus='' ng-model='locationController.latitude' required='' paceholder='Enter your latitude'>
+							</div>
+
+							<div class='form-group'>
+								<label class='control-label'>Longitude</label>
+								<input id='longitude' class='form-control' type='text' autofocus='' ng-model='locationController.longitude' required='' paceholder='Enter your longitude'>
+							</div>
+							<input class="btn btn-primary" type="submit" ng-disabled="form.$invalid" value="Find" disabled="disabled" ng-click='locationController.getPharmacies()'>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+
+
+				<label>Location Status: </label><span>{{ locationController.statusMsg }}</span>
+				<button ng-click='locationController.grabLocation()'>Grab User Location</button>
+
+				<ui-gmap-google-map center='locationController.map.center' zoom='locationController.map.zoom'>
+		  		
+
+					<ui-gmap-markers models="locationController.map.markers" idkey="'id'" coords="'coords'" icon="'icon'" options="'options'" isLabel='true' click="'onClick'" events="'events'">
+
+						<ui-gmap-windows coords="'self'" options="windowOptions" closeClick="closeClick()">
+							<div ng-non-bindable>{{title}}</div>
+					</ui-gmap-windows>
+
+				</ui-gmap-markers>
+					
+				</ui-gmap-google-map>
+				<!--TODO: replace with google maps and a list of nearby pharmacies-->
+		</div>
+	</div>
+</div>
