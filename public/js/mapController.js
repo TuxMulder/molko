@@ -6,9 +6,6 @@
 
 	function LocationController ($http, MarkerCreatorService) {
 		var vm = this;
-
-		vm.statusMsg = 'N/A';
-
 		vm.getPharmacies = function () {
 			$http.post('/pharmacies', { lat: vm.latitude, long: vm.longitude})
 				.success(function (pharmacies){
@@ -34,18 +31,56 @@
 			return tempMarker;
 		}
 
-		/*ioSocket.on('userLocation', function (latitude, longitude, statusMsg){
-			vm.latitude = latitude;
-			vm.longitude = longitude;
-			vm.statusMsg = statusMsg;
+		vm.drawMap = function (latitude, longitude, zoom) {
+			if(!latitude || !longitude){
+				latitude = 54.559322;
+				longitude = -4.174804;
+				zoom = 5;
+			}
 			vm.map = { 
 				center:{ 
 					latitude: latitude, 
 					longitude: longitude 
 				}, 
-				zoom: 12,
+				zoom: zoom,
 				markers: []
 			};
+		}
+
+		vm.determineError = function(error){
+            var errorMsg = 'Unable to determine user location';
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMsg = "User denied the request for Geolocation."
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMsg = "Location information is unavailable."
+                    break;
+                case error.TIMEOUT:
+                    errorMsg = "The request to get user location timed out."
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorMsg = "An unknown error occurred."
+                    break;
+            }
+        }
+
+        vm.getLocation = function(){
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(vm.getPosition, vm.determineError);
+            }else{
+            	vm.drawMap(null, null, null);
+            }
+        }
+
+        vm.getPosition = function(position){
+            vm.lat = position.coords.latitude;
+            vm.lon = position.coords.longitude;
+            vm.drawMap(position.coords.latitude, position.coords.longitude, 5);
+        }
+
+        vm.getLocation();
+		/*ioSocket.on('userLocation', function (latitude, longitude, statusMsg){
 
 			vm.userMarker = vm.createMarker(latitude, longitude, 'User is here');
 			vm.map.markers.push(vm.userMarker);

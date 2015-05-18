@@ -1,8 +1,8 @@
 <div class="container">
 	<div class="row" style="padding-top:40px;">
-		<div class="angular-google-map-container" ng-controller='LocCtrl as locationController'>
 
-			<div class="col-lg-offset-4 col-lg-4">
+		<div class="angular-google-map-container" ng-controller='LocCtrl as locationController'>
+			<!--<div class="col-lg-8">
 				<div class="panel panel-primary">
 					<div class="panel-heading">Find a Pharmacy</div>
 						<form class='ng-invalid ng-invalid-required ng-dirty' ng-submit name='findPharmacies'>
@@ -19,13 +19,8 @@
 						</form>
 					</div>
 				</div>
-			</div>
+			</div>-->
 
-
-
-
-				<label>Location Status: </label><span>{{ locationController.statusMsg }}</span>
-				<button ng-click='locationController.grabLocation()'>Grab User Location</button>
 
 				<ui-gmap-google-map center='locationController.map.center' zoom='locationController.map.zoom'>
 		  		
@@ -34,12 +29,11 @@
 
 						<ui-gmap-windows coords="'self'" options="windowOptions" closeClick="closeClick()">
 							<div ng-non-bindable>{{title}}</div>
-					</ui-gmap-windows>
+						</ui-gmap-windows>
 
-				</ui-gmap-markers>
+					</ui-gmap-markers>
 					
 				</ui-gmap-google-map>
-				<!--TODO: replace with google maps and a list of nearby pharmacies-->
 		</div>
 	</div>
 </div>

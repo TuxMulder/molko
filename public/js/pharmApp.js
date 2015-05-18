@@ -6,14 +6,15 @@
 			'uiGmapgoogle-maps',
 			'ngRoute'
 			])
-		.config(function(uiGmapGoogleMapApiProvider, $routeProvider){
+		.config(function (uiGmapGoogleMapApiProvider, $routeProvider){
     		uiGmapGoogleMapApiProvider.configure({
     			key: '<api_key>',
     			v: '3.17'
     		});
+    		
     		$routeProvider
 		            .when('/', {
-		                templateUrl : 'templates/PharmacyFind.html'
+		                templateUrl : 'templates/map.html'
 		            });
     	});
 })();
